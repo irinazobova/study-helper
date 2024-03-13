@@ -1,5 +1,6 @@
 # study-helper
 Персонализированный календарь и трекер задач в Google таблицах с использованием Google Apps Script.
+![image](https://github.com/irinazobova/study-helper/assets/141981835/fd3569fa-1b6d-45b1-afb2-2c85bbcfb79c)
 
 Необходимые триггеры:
 *  function SortRange()
