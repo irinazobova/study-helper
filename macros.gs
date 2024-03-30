@@ -16,33 +16,6 @@ function SortRange() {
   else if (active.getSheetName() === "Расписание") {}
 };
 
-//в расписании студента создаются строки для четных и нечетных недель, в зависимости от недели скрываются нужные строки. требует ручного внимательного создания расписания
-function AutoHide() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName("Расписание");
-  var range = sheet.getRange("C2");
-  var value = range.getValue();
-  
-  if (value === "нечетная" ) {
-    sheet.showRows(21);
-    sheet.hideRows(18);
-    sheet.hideRows(22);
-  }
-  else if (value === "четная" ) {
-    sheet.hideRows(21);
-    sheet.showRows(18);
-    sheet.showRows(22);
-  }
-};
-
-// еженедельное обновление счетчика недель. требует единоразовой настройки на "1" в начале семестра
-function WeekCounter() {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Расписание");
-    var range = sheet.getRange("B2").getValue();
-    var i = range + 1;
-    sheet.getRange("B2").setValue(i);
-};
-
 // раскраска предметов по цветам, палитра подбирается вручную. требует единоразовой правки в названиях предметов в начале семестра
 function AutoColor() {
   Utilities.sleep(1000);
@@ -56,7 +29,7 @@ function AutoColor() {
     range1.setBackground('#F5B7B3');
     range2.setBackground('#FFFFFF');
   }
-  else if (value[i-2][0] == 'Кванты'){
+  else if (value[i-2][0] == 'Философия'){
     range1.setBackground('#FF6633');
     range2.setBackground('#FFFFFF');
   }
@@ -64,27 +37,27 @@ function AutoColor() {
     range1.setBackground('#00ccff');
     range2.setBackground('#FFFFFF');
   }
-  else if (value[i-2][0] == 'КЭД'){
+  else if (value[i-2][0] == 'Плазма'){
     range1.setBackground('#99CCFF');
     range2.setBackground('#FFFFFF');
   }
-  else if (value[i-2][0] == 'Матстат'){
+  else if (value[i-2][0] == 'Вычфизика'){
     range1.setBackground('#6666cc');
     range2.setBackground('#FFFFFF');
   }
-    else if (value[i-2][0] == 'Ядэл'){
+    else if (value[i-2][0] == 'Приборы'){
     range1.setBackground('#99CC99');
     range2.setBackground('#FFFFFF');
   }
-    else if (value[i-2][0] == 'Гелиофиз'){
+    else if (value[i-2][0] == 'Астрофиз'){
     range1.setBackground('#99FFCC');
     range2.setBackground('#FFFFFF');
   }
-  else if (value[i-2][0] == 'Обрез'){
+  else if (value[i-2][0] == 'ML'){
     range1.setBackground('#FFFF70');
     range2.setBackground('#FFFFFF');
   }
-    else if (value[i-2][0] == 'Спецпрак'){
+    else if (value[i-2][0] == 'Научка'){
     range1.setBackground('#FFCC66');
     range2.setBackground('#FFFFFF');
   }
@@ -96,13 +69,29 @@ function AutoColor() {
     range1.setBackground('#cc99cc');
     range2.setBackground('#FFFFFF');
   }
-  else if (value[i-2][0] == 'Встречи'){
+  else if (value[i-2][0] == 'Работа'){
     range1.setBackground('#FF3333');
     range2.setBackground('#F5B7B3');
   }
   else {
     range1.setBackground('#FFFFFF');
     range2.setBackground('#FFFFFF');
+    }
+  }
+};
+
+// если дедлайн прошел, а задача еще не выполнена, дата дедлайна устанавливается на текущий день и задание выделяется жирным текстом
+function SetDeadline() {
+  Utilities.sleep(500);
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Задачи");
+  for (i = 2; i<= 10; i++) {
+    var task = spreadsheet.getRange(i,4);
+    var deadline = spreadsheet.getRange(i,5).getValue().toString();
+    var deadline = Utilities.formatDate(new Date(deadline), "GMT+3", "dd.MM.yyyy").toString();
+    var nowdate = Utilities.formatDate(new Date(), "GMT+3", "dd.MM.yyyy").toString();
+    if (deadline <= nowdate){
+	    spreadsheet.getRange(i,5).setValue(nowdate);
+      spreadsheet.getRange(i,4).setFontWeight('bold');
     }
   }
 };
@@ -120,4 +109,31 @@ function AutoFill() {
   spreadsheet.getRange('B2:E500').activate();
   spreadsheet.setActiveRange(range);
   spreadsheet.setCurrentCell(currentCell);
+};
+
+// еженедельное обновление счетчика недель. требует единоразовой настройки на "1" в начале семестра
+function WeekCounter() {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Расписание");
+    var range = sheet.getRange("B2").getValue();
+    var i = range + 1;
+    sheet.getRange("B2").setValue(i);
+};
+
+//в расписании студента создаются строки для четных и нечетных недель, в зависимости от недели скрываются нужные строки. требует ручного внимательного создания расписания
+function AutoHide() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("Расписание");
+  var range = sheet.getRange("C2");
+  var value = range.getValue();
+  
+  if (value === "нечетная" ) {
+    sheet.showRows(21);
+    sheet.hideRows(18);
+    sheet.hideRows(22);
+  }
+  else if (value === "четная" ) {
+    sheet.hideRows(21);
+    sheet.showRows(18);
+    sheet.showRows(22);
+  }
 };
