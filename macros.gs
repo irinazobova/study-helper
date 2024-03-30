@@ -84,14 +84,24 @@ function AutoColor() {
 function SetDeadline() {
   Utilities.sleep(500);
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Задачи");
-  for (i = 2; i<= 10; i++) {
+  for (i = 2; i<= 100; i++) {
     var task = spreadsheet.getRange(i,4);
     var deadline = spreadsheet.getRange(i,5).getValue().toString();
-    var deadline = Utilities.formatDate(new Date(deadline), "GMT+3", "dd.MM.yyyy").toString();
-    var nowdate = Utilities.formatDate(new Date(), "GMT+3", "dd.MM.yyyy").toString();
-    if (deadline <= nowdate){
+    var deadtime = Utilities.formatDate(new Date(deadline), "GMT+3", "dd.MM.yyyy");
+    var nowdate = Utilities.formatDate(new Date(), "GMT+3", "dd.MM.yyyy");
+    var deadline_ms = new Date(deadline).getTime();
+    var nowdate_ms = new Date().getTime();
+    if (deadline == '') {
+      //
+    }
+    else if (deadline_ms < nowdate_ms){
 	    spreadsheet.getRange(i,5).setValue(nowdate);
-      spreadsheet.getRange(i,4).setFontWeight('bold');
+    }
+    else if (deadline_ms == nowdate_ms) {
+      spreadsheet.getRange(i,4).setFontWeight("bold");
+    }
+    else if (deadline_ms > nowdate_ms) {
+      spreadsheet.getRange(i,4).setFontWeight("normal");
     }
   }
 };
