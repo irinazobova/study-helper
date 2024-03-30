@@ -95,7 +95,8 @@ function SetDeadline() {
       //
     }
     else if (deadline_ms < nowdate_ms){
-	    spreadsheet.getRange(i,5).setValue(nowdate);
+      spreadsheet.getRange(i,5).setValue(nowdate);
+      spreadsheet.getRange(i,4).setFontWeight("bold");
     }
     else if (deadline_ms == nowdate_ms) {
       spreadsheet.getRange(i,4).setFontWeight("bold");
